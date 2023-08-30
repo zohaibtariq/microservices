@@ -1,0 +1,17 @@
+docker build -t zohaibtariq/client:0.0.1 .
+docker build -t zohaibtariq/comments:0.0.1 .
+docker build -t zohaibtariq/event-bus:0.0.1 .
+docker build -t zohaibtariq/moderation:0.0.1 .
+docker build -t zohaibtariq/posts:0.0.1 .
+docker build -t zohaibtariq/query:0.0.1 .
+
+docker run zohaibtariq/client
+docker run zohaibtariq/comments
+docker run zohaibtariq/event-bus
+docker run zohaibtariq/moderation
+docker run zohaibtariq/posts
+docker run zohaibtariq/query
+
+cd infra/k8s
+kubectl apply -f posts.yml
+kubectl get pods
