@@ -1,9 +1,61 @@
-docker build -t zohaibtariq/client:0.0.1 .
-docker build -t zohaibtariq/comments:0.0.1 .
-docker build -t zohaibtariq/event-bus:0.0.1 .
-docker build -t zohaibtariq/moderation:0.0.1 .
-docker build -t zohaibtariq/posts:0.0.1 .
-docker build -t zohaibtariq/query:0.0.1 .
+cd /Volumes/Projects/code/microservice/client
+docker build -t zohaibtariq/client .
+docker push zohaibtariq/client
+
+cd /Volumes/Projects/code/microservice/comments
+docker build -t zohaibtariq/comments .
+docker push zohaibtariq/comments
+
+cd /Volumes/Projects/code/microservice/event-bus
+docker build -t zohaibtariq/event-bus .
+docker push zohaibtariq/event-bus
+
+cd /Volumes/Projects/code/microservice/moderation
+docker build -t zohaibtariq/moderation .
+docker push zohaibtariq/moderation
+
+cd /Volumes/Projects/code/microservice/posts
+docker build -t zohaibtariq/posts .
+docker push zohaibtariq/posts
+
+cd /Volumes/Projects/code/microservice/query
+docker build -t zohaibtariq/query .
+docker push zohaibtariq/query
+
+cd /Volumes/Projects/code/microservice/infra/k8s
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/cloud/deploy.yaml
+k apply -f .
+
+k rollout restart deployment client-depl
+k rollout restart deployment comments-depl
+k rollout restart deployment event-bus-depl
+k rollout restart deployment moderation-depl
+k rollout restart deployment posts-depl
+k rollout restart deployment query-depl
+
+skaffold dev
+skaffold dev -v debug
+skaffold build
+
+========================================================================================================================
+
+k apply -f posts.yml
+k apply -f posts-depl.yml
+k apply -f posts-srv.yaml
+k apply -f event-bus-depl.yaml
+
+k get deployments
+k get pods
+k get services
+
+#kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+#kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/cloud-generic.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/cloud/deploy.yaml
+
+sudo nano /etc/hosts
+127.0.0.1 posts.com
+
+DOCKER COMMANDS
 
 docker run zohaibtariq/client
 docker run zohaibtariq/comments
@@ -12,6 +64,16 @@ docker run zohaibtariq/moderation
 docker run zohaibtariq/posts
 docker run zohaibtariq/query
 
-cd infra/k8s
-kubectl apply -f posts.yml
-kubectl get pods
+docker ps                           => kubectl get pods
+docker exec -t [containerid] [cmd]  => docker exec -t [containerid] [cmd]
+docker logs [containerid]           => kubectl logs [pod_name]
+                                    => kubectl delete pod [pod_name]
+                                    => kubectl apply -f [config file name]
+                                    => kubectl describe pod [pod_name]
+                                    pod can be replaced with deployment
+
+docker container prune -f
+docker image prune -f
+docker volume prune -f
+docker network prune -f
+docker system prune -f

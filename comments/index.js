@@ -9,9 +9,11 @@ app.use(bodyParser.json())
 // Configure CORS to allow requests only from a specific origin and port
 const allowedOrigins = [
     'http://localhost:3000',  // Add more origins if needed
+    'http://posts.com',  // Add more origins if needed
 ];
 const corsOptions = {
     origin: (origin, callback) => {
+        console.log('comment service origin : ' + origin);
         if (origin === undefined || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
@@ -36,7 +38,7 @@ app.post('/posts/:id/comments', async (req, res) => {
     comments.push({id: commentId, content, status: 'pending'})
     commentsByPostId[req.params.id] = comments;
 
-    await axios.post('http://localhost:4005/events', {
+    await axios.post('http://event-bus-clusterip-srv:4005/events', {
         type: 'CommentCreated',
         data: {
             id: commentId,
@@ -59,7 +61,7 @@ app.post('/events', async (req, res) => {
             return comment.id === id
         })
         comment.status = status;
-        await axios.post('http://localhost:4005/events', {
+        await axios.post('http://event-bus-clusterip-srv:4005/events', {
             type: 'CommentUpdated',
             data: {
                 id,

@@ -9,9 +9,11 @@ app.use(bodyParser.json())
 // Configure CORS to allow requests only from a specific origin and port
 const allowedOrigins = [
     'http://localhost:3000',  // Add more origins if needed
+    'http://posts.com',  // Add more origins if needed
 ];
 const corsOptions = {
     origin: (origin, callback) => {
+        console.log('post service origin : ' + origin);
         if (origin === undefined || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
@@ -28,15 +30,15 @@ app.get('/posts', (req, res) => {
     res.status(200).send(posts)
 });
 
-app.post('/posts', async (req, res) => {
-    console.log('POST /posts')
+app.post('/posts/create', async (req, res) => {
+    console.log('POST /posts/create')
     const id = randomBytes(4).toString('hex');
     const {title} = req.body;
     posts[id] = {
         id, title
     }
 
-    await axios.post('http://localhost:4005/events', {
+    await axios.post('http://event-bus-clusterip-srv:4005/events', {
         type: 'PostCreated',
         data: {
             id,

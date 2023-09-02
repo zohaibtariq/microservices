@@ -1,14 +1,33 @@
 {
   "name": "query",
   "version": "1.0.0",
-  "description": "",
+  "description": "It a part of microservice acting as a query service API.",
+  "repository": "https://github.com/zohaibtariq/microservices",
+  "license": "MIT",
+  "keywords": [
+    "microservices",
+    "query",
+    "node",
+    "nodejs",
+    "node.js",
+    "express.js"
+  ],
+  "authors": [
+    {
+      "name": "Zohaib Tariq",
+      "email": "zebwebdev@gmail.com",
+      "url": "https://github.com/zohaibtariq"
+    },
+    {
+      "name": "Zohaib Tariq",
+      "email": "se.zohaib@gmail.com",
+      "url": "https://github.com/zohaibtariq"
+    }
+  ],
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "axios": "^1.5.0",
     "cors": "^2.8.5",
